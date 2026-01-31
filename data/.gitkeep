@@ -1,0 +1,9 @@
+# Keep this directory for data storage
+# Raw data files
+*.csv
+*.json
+*.txt
+
+# Processed data
+*.pkl
+*.parquet
