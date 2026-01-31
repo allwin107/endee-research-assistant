@@ -5,7 +5,16 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30+-red.svg)](https://streamlit.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-AI Research Assistant platform showcasing **Endee Vector Database** capabilities with semantic search, RAG (Retrieval-Augmented Generation).
+AI Research Assistant platform showcasing **Endee Vector Database** capabilities with semantic search, RAG (Retrieval-Augmented Generation), and high-performance hybrid retrieval.
+
+## Problem Statement
+
+Researchers and ML engineers are often overwhelmed by the sheer volume of new research papers published daily on platforms like arXiv. Traditional keyword-based search fails to capture the semantic nuance of complex topics (e.g., "attention mechanism variants"), while basic LLM chatbots lack access to the latest, most relevant papers.
+
+**This project solves these challenges by:**
+1. Providing a **Semantic Search** engine that understands researcher intent.
+2. Implementing a **RAG (Retrieval-Augmented Generation)** assistant that answers questions with direct citations from actual research papers.
+3. Leveraging **Endee Vector Database** for efficient, low-latency retrieval of high-dimensional embeddings.
 
 ## Features
 
@@ -25,6 +34,17 @@ graph TB
     C --> F[Dense Index<br/>384-dim]
     C --> G[Hybrid Index<br/>Dense + Sparse]
 ```
+
+## Technical Approach
+
+The platform follows a standard RAG (Retrieval-Augmented Generation) architecture optimized for research workflows:
+
+1.  **Context Injection**: New research papers are chunked and vectorized using the `all-MiniLM-L6-v2` model.
+2.  **Vector Storage (Endee)**: Embeddings and metadata are stored in Endee. We use **INT8D precision** for efficient storage without sacrificing retrieval accuracy.
+3.  **Advanced Retrieval**:
+    *   **Semantic Matching**: Queries are converted into embeddings and matched against the dense index using Cosine Similarity.
+    *   **Hybrid Reranking**: For specific keyword requirements (e.g., "ResNet-50"), the hybrid search combines semantic meaning with sparse character-level matching.
+4.  **Generative AI (Groq)**: The top results are retrieved from Endee and injected into the prompt context for Groq's Llama 3.3 model, which provides answers with grounded citations.
 
 ## Quick Start
 
@@ -166,9 +186,9 @@ endee-research-assistant/
 │   └── app.py          # Main app
 ├── scripts/            # Setup and ingestion scripts
 ├── tests/              # Unit and integration tests
-├── docs/               # Documentation
 ├── data/               # Data storage
-└── docker-compose.yml  # Service orchestration
+├── docker-compose.yml  # Service orchestration
+└── requirements.txt    # Project-wide dev dependencies
 ```
 
 ## Configuration
@@ -187,10 +207,6 @@ LOG_LEVEL=INFO
 CACHE_SIZE=1000
 ```
 
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
-
 ## License
 
 This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
@@ -206,7 +222,6 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 - **GitHub**: [@allwin107](https://github.com/allwin107)
 - **Email**: allwin10raja@gmail.com
-- **Documentation**: [Full Docs](docs/README.md)
 
 ---
 
